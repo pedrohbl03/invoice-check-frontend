@@ -1,3 +1,5 @@
+import Container from "@/components/Container";
+
 export default function AuthLayout({
   children,
 }: Readonly<{
@@ -5,7 +7,9 @@ export default function AuthLayout({
 }>) {
   return (
     <div className="auth-layout">
-      {children}
+      <Container className="h-screen flex items-center justify-center">
+        {children}
+      </Container>
     </div>
   )
 }
