@@ -15,9 +15,13 @@ import {
 import { Separator } from "@/components/ui/separator";
 
 import { LogOutIcon, UserIcon } from "lucide-react";
-import Link from "next/link";
 
-const Header = () => {
+import Link from "next/link";
+import { auth, signOut } from "../../../auth";
+
+const Header = async () => {
+  const session = await auth()
+
   return (
     <div className="py-4 space-y-4">
       <div className="flex justify-between items-center max-w-7xl mx-auto">
@@ -40,15 +44,20 @@ const Header = () => {
                 <div className="flex items-center gap-2">
                   <UserIcon className="w-4 h-4" />
                   <h2 className="text-md font-semibold">
-                    John Doe
+                    {session?.user?.name}
                   </h2>
                 </div>
                 <p className="text-sm text-gray-500">
-                  john.doe@example.com
+                  {session?.user?.email}
                 </p>
               </div>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={async () => {
+                  "use server"
+                  await signOut({ redirectTo: "/signin" })
+                }}
+              >
                 <LogOutIcon />
                 Logout
               </DropdownMenuItem>
