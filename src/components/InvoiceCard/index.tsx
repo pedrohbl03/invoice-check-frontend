@@ -15,7 +15,7 @@ const InvoiceCard = ({
         <div className="aspect-3/4 relative">
           <Image
             src="/teste-invoice.png"
-            alt={invoice.name}
+            alt={invoice.fileOriginalName}
             className="w-full h-full object-cover"
             fill
           />

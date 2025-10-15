@@ -4,7 +4,7 @@ import { IInvoiceDetailsProps } from "./types"
 import Image from "next/image"
 import { Separator } from "../ui/separator"
 import { cn } from "@/utils/cn"
-import { formatCurrency, formatDate } from "@/utils/format"
+import { formatCurrency, formatDate, formatScientificToNumber } from "@/utils/format"
 import { Button } from "../ui/button"
 
 const InvoiceDetailsLabel = ({ label, value, icon }: { label: string, value: string, icon: React.ReactNode }) => {
@@ -22,28 +22,15 @@ const InvoiceDetailsLabel = ({ label, value, icon }: { label: string, value: str
   )
 }
 
-const InvoiceDetails = ({
-  id,
-  fileName,
-  items,
-  uploadedAt,
-  totalAmount,
-  status,
-  from,
-  to,
-  invoiceNumber,
-  invoiceDate,
-  invoiceDueDate,
-  imageUrl = "/teste-invoice.png",
-}: IInvoiceDetailsProps) => {
+const InvoiceDetails = (invoiceDetailsProps: IInvoiceDetailsProps) => {
   return (
     <div className="flex flex-col gap-4">
-      {imageUrl && (
+      {invoiceDetailsProps.invoiceUrl && (
         <div className="bg-white rounded-lg overflow-hidden shadow-md border-1 border-gray-200">
           <div className="aspect-3/4 relative">
             <Image
-              src="/teste-invoice.png"
-              alt="Invoice"
+              src={'/teste-invoice.png'}
+              alt="Invoice image"
               className="w-full h-full object-cover"
               fill
             />
@@ -55,8 +42,8 @@ const InvoiceDetails = ({
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-bold">Extracted invoice details</h2>
 
-          {status && (
-            <Badge className="px-4 rounded-full">{status}</Badge>
+          {invoiceDetailsProps.invoiceStatus && (
+            <Badge className="px-4 rounded-full">{invoiceDetailsProps.invoiceStatus}</Badge>
           )}
         </div>
 
@@ -64,42 +51,34 @@ const InvoiceDetails = ({
 
         {/* Invoice details */}
         <div className="flex flex-col gap-4 py-4">
-          {invoiceNumber && (
+          {invoiceDetailsProps.invoiceNumber && (
             <InvoiceDetailsLabel
               label="Invoice number"
-              value={invoiceNumber}
+              value={invoiceDetailsProps.invoiceNumber}
               icon={<FileDigit />}
             />
           )}
 
-          {from && from.name && (
+          {invoiceDetailsProps.shipperName && (
             <InvoiceDetailsLabel
               label="From"
-              value={from.name}
+              value={invoiceDetailsProps.shipperName}
               icon={<ShoppingBag />}
             />
           )}
 
-          {to && to.name && (
+          {invoiceDetailsProps.consigneeName && (
             <InvoiceDetailsLabel
               label="To"
-              value={to.name}
+              value={invoiceDetailsProps.consigneeName}
               icon={<User />}
             />
           )}
 
-          {invoiceDueDate && (
-            <InvoiceDetailsLabel
-              label="Invoice due date"
-              value={formatDate(invoiceDueDate)}
-              icon={<Calendar />}
-            />
-          )}
-
-          {invoiceDate && (
+          {invoiceDetailsProps.invoiceDate && (
             <InvoiceDetailsLabel
               label="Invoice date"
-              value={formatDate(invoiceDate)}
+              value={formatDate(invoiceDetailsProps.invoiceDate)}
               icon={<Calendar />}
             />
           )}
@@ -108,26 +87,48 @@ const InvoiceDetails = ({
         <Separator />
 
         {/* Invoice Items */}
-        {items && (
+        {invoiceDetailsProps.invoiceItems && (
           <>
-            <div className="flex items-center gap-2 py-2">
+            <div className="flex items-center gap-2 pt-4 pb-6">
               <ShoppingBag className="w-5 h-5" />
-              <h3 className="text-md text-muted-foreground font-medium">Items ({items.length})</h3>
+              <h3 className="text-md text-muted-foreground font-medium">Items ({invoiceDetailsProps.invoiceItems.length})</h3>
             </div>
 
-            {items.map((item, idx) => (
+
+
+            {invoiceDetailsProps.invoiceItems.map((item, idx) => (
               <div className={cn("flex justify-between items-center py-2 px-4 rounded-md", idx % 2 === 0 && "bg-gray-100")} key={idx}>
-                <span className="text-sm">{item.name}</span>
-                <span className="text-sm">{formatCurrency(item.price)}</span>
+                <div className="text-right gap-2 flex">
+                  <span className="text-sm">{item.itemQuantity}x</span>
+                  <span className="text-sm">{item.itemName}</span>
+                </div>
+                <div>
+                  <div className="text-right gap-2 flex justify-end">
+                    <span className="text-sm">{formatCurrency(formatScientificToNumber(item.itemPrice) ?? 0)}</span>
+                    <span className="text-sm text-muted-foreground">each</span>
+                  </div>
+                  <div className="text-right gap-2 flex justify-end">
+                    <span className="text-sm">{formatCurrency(formatScientificToNumber(item.itemTotal) ?? 0)}</span>
+                    <span className="text-sm text-muted-foreground">total</span>
+                  </div>
+                </div>
               </div>
             ))}
 
+
             <Separator className="my-4" />
 
-            {totalAmount && (
+            {invoiceDetailsProps.invoiceTax && (
+              <div className="flex justify-between items-center py-2 px-4 rounded-md">
+                <span className="text-sm">Tax</span>
+                <span className="text-sm">{formatCurrency(formatScientificToNumber(invoiceDetailsProps.invoiceTax) ?? 0)}</span>
+              </div>
+            )}
+
+            {invoiceDetailsProps.invoiceAmount && (
               <div className="flex justify-between items-center py-2 px-4 rounded-md">
                 <span className="text-sm">Total</span>
-                <span className="text-sm">{formatCurrency(totalAmount)}</span>
+                <span className="text-sm">{formatCurrency(formatScientificToNumber(invoiceDetailsProps.invoiceAmount) ?? 0)}</span>
               </div>
             )}
           </>
@@ -136,18 +137,18 @@ const InvoiceDetails = ({
 
       <div className="bg-white rounded-lg overflow-hidden shadow-md px-4 py-6 border-1 border-gray-200">
         <div className="flex flex-col gap-4">
-          {fileName && (
+          {invoiceDetailsProps.fileOriginalName && (
             <InvoiceDetailsLabel
               label="File name"
-              value={fileName}
+              value={invoiceDetailsProps.fileOriginalName}
               icon={<FileArchive />}
             />
           )}
 
-          {uploadedAt && (
+          {invoiceDetailsProps.createdAt && (
             <InvoiceDetailsLabel
-              label="Uploaded at"
-              value={formatDate(uploadedAt)}
+              label="Created at"
+              value={formatDate(invoiceDetailsProps.createdAt)}
               icon={<Calendar />}
             />
           )}

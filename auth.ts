@@ -33,6 +33,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           id: authResponse.user?.id,
           name: authResponse.user?.name,
           email: authResponse.user?.email,
+          role: authResponse.user?.role, // Ensure role is included
+          accessToken: authResponse.tokens.accessToken.token,
         }
       },
     }),
@@ -41,5 +43,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     authorized: async ({ auth }) => {
       return !!auth
     },
+    session({ session, token }) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id as string,
+          email: token.email as string,
+          role: token.role as string,
+          accessToken: token.accessToken as string,
+        }
+      }
+    },
+    jwt({ token, user, trigger, session, account }) {
+      if (account && user) {
+        token.id = user.id
+        token.email = user.email
+        token.role = user.role
+        token.accessToken = user.accessToken
+      }
+      return token
+    }
   },
 })

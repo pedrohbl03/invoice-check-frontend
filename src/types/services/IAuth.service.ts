@@ -9,12 +9,21 @@ export interface IAuthServiceRegisterParams {
   password: string;
 }
 
-export interface IAuthServiceResponse {
+export interface IAuthServiceToken {
   token: string;
+  expiresexpiresIn: string;
+}
+
+export interface IAuthServiceResponse {
+  tokens: {
+    accessToken: IAuthServiceToken;
+    refreshToken: IAuthServiceToken;
+  };
   user: {
     id: string;
     name: string;
     email: string;
+    role: string;
   };
 }
 
