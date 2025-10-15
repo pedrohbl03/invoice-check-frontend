@@ -1,5 +1,6 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { auth } from '../../auth';
+import { getSession } from 'next-auth/react';
 export interface ApiError {
   status?: number;
   message: string;
@@ -11,26 +12,46 @@ const instance = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-// Attach bearer token if available
-instance.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
 
-  const authSession = await auth();
-  const token = authSession?.user.accessToken;
+const isServer = typeof window === "undefined"
+
+const logInterceptor = async (req: InternalAxiosRequestConfig) => {
+  if (isServer) {
+    console.log("[AXIOS] [SERVER] ", req.url)
+  } 
+  else {
+    console.log("[AXIOS] [CLIENT] ", req.url)
+  }
+  return req
+}
+
+
+instance.interceptors.request.use(logInterceptor, (error) => Promise.reject(error));
+instance.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
+  if (isServer) {
+    const session = await auth()
+    const token = session?.user.accessToken;
 
     if (token) {
       config.headers = config.headers || {};
-      // AxiosRequestHeaders is an index signature so this is safe
       (config.headers as Record<string, string>).Authorization = `Bearer ${token}`;
     }
 
-  return config;
+    return config;
+  } else {
+    const session = await getSession();
+    const token = session?.user.accessToken;
+    if (token) {
+      config.headers = config.headers || {};
+      (config.headers as Record<string, string>).Authorization = `Bearer ${token}`;
+    }
+    return config;
+  }
 });
 
-// Normalize errors to a consistent shape while still rejecting so callers can decide
 instance.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    // Try to extract a conventional message field
     const maybeData = error.response?.data as unknown;
     let extractedMessage = error.message;
     if (maybeData && typeof maybeData === 'object' && 'message' in (maybeData as Record<string, unknown>)) {
