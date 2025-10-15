@@ -1,12 +1,21 @@
 import api from './instance';
-import { ChatMessageDTO, InvoiceDTO } from '@/types/services/IInvoice.service';
+import { IChatHistoryDTO, IChatInteractionsDTO, InvoiceDTO } from '@/types/services/IInvoice.service';
+import { AxiosRequestConfig } from 'axios';
 
-export const uploadInvoice = async (file: File) => {
+export const uploadInvoice = async (file: File, options?: { onProgress?: (pct: number) => void; signal?: AbortSignal; }) => {
   const formData = new FormData();
   formData.append('file', file);
-  const { data } = await api.post<InvoiceDTO>('/invoices', formData, {
+  const config: AxiosRequestConfig = {
     headers: { 'Content-Type': 'multipart/form-data' },
-  });
+    signal: options?.signal,
+    onUploadProgress: (evt) => {
+      if (evt.total && options?.onProgress) {
+        const pct = Math.round((evt.loaded / evt.total) * 100);
+        options.onProgress(pct);
+      }
+    }
+  };
+  const { data } = await api.post<InvoiceDTO>('/invoices', formData, config);
   return data;
 };
 
@@ -30,12 +39,12 @@ export const deleteInvoice = async (id: string) => {
   return { success: true };
 };
 
-export const listInvoiceChat = async (id: string) => {
-  const { data } = await api.get<ChatMessageDTO[]>(`/invoices/${id}/chat`);
+export const getChatByInvoiceId = async (id: string) => {
+  const { data } = await api.get<IChatHistoryDTO>(`/invoices/${id}/chat`);
   return data;
-};
+}
 
 export const sendInvoiceChatMessage = async (id: string, message: string) => {
-  const { data } = await api.post<ChatMessageDTO>(`/invoices/${id}/chat`, { message });
+  const { data } = await api.post<IChatInteractionsDTO>(`/invoices/${id}/chat`, { message });
   return data;
 };

@@ -12,7 +12,6 @@ const logout = async () => {
 };
 
 const register = async (userData: IAuthServiceRegisterParams) => {
-  console.log('Registering user with data:', userData); // Debug log
   const response = await instance.post("/auth/register", userData);
   return response.data;
 };

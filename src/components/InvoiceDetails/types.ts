@@ -1,11 +1,14 @@
 
 type InvoiceItem = {
-  name: string;
-  quantity: number;
-  price: ScientificNumber;
+  itemName: string;
+  itemQuantity: number;
+  itemPrice: ScientificNumber;
+  itemTotal: ScientificNumber;
 }
 
-type ScientificNumber = { s: number; e: number; d: number[] };
+export type ScientificNumber = number | { s: number; e: number; d: number[] };
+
+export type InvoiceStatus = "PENDING" | "ANALYZED" | "ERROR";
 
 export interface IInvoiceDetailsProps {
   id: string;
@@ -17,7 +20,7 @@ export interface IInvoiceDetailsProps {
   invoiceAmount: ScientificNumber | null;
   invoiceDiscount: number | null;
   invoiceTax: ScientificNumber | null;
-  invoiceStatus: string | null;
+  invoiceStatus: InvoiceStatus | null;
   invoiceUrl: string | null;
   invoiceItems: InvoiceItem[];
   fileOriginalName: string | null;

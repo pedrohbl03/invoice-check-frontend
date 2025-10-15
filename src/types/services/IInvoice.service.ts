@@ -1,3 +1,5 @@
+import { InvoiceStatus } from "@/components/InvoiceDetails/types";
+
 export interface InvoiceDTO {
   id: string;
   userId: string;
@@ -8,16 +10,31 @@ export interface InvoiceDTO {
   invoiceAmount: number | null;
   invoiceDiscount: number | null;
   invoiceTax: number | null;
-  invoiceStatus: string | null;
+  invoiceStatus: InvoiceStatus;
   invoiceUrl: string | null;
   fileOriginalName: string | null;
   createdAt: string | null;
   updatedAt: string | null;
+  invoiceItems: InvoiceItemDTO[];
+}
+export interface InvoiceItemDTO {
+  itemName: string;
+  itemQuantity: number;
+  itemPrice: number;
+  itemTotal: number;
 }
 
-export interface ChatMessageDTO {
+export interface IChatInteractionsDTO {
   id?: string;
-  role: 'user' | 'assistant' | 'system';
-  message: string;
+  chatId?: string;
+  role: 'USER' | 'ASSISTANT';
+  content: string;
+  createdAt?: string;
+}
+
+export interface IChatHistoryDTO {
+  id?: string;
+  invoiceId?: string;
+  chatInteractions: IChatInteractionsDTO[];
   createdAt?: string;
 }
