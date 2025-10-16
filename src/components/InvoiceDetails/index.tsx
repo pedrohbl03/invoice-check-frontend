@@ -3,7 +3,7 @@ import { Badge } from "../ui/badge"
 import Image from "next/image"
 import { Separator } from "../ui/separator"
 import { cn } from "@/utils/cn"
-import { formatCurrency, formatDate, formatScientificToNumber } from "@/utils/format"
+import { formatCurrency, formatDate } from "@/utils/format"
 import { Button } from "../ui/button"
 import { INVOICE_STATUS } from "@/constants/invoice.constants"
 import { Spinner } from "../ui/spinner"
@@ -107,11 +107,11 @@ const InvoiceDetails = (invoiceDetailsProps: InvoiceDTO) => {
                     </div>
                     <div>
                       <div className="text-right gap-2 flex justify-end">
-                        <span className="text-sm">{formatCurrency(formatScientificToNumber(item.itemPrice) ?? 0)}</span>
+                        <span className="text-sm">{formatCurrency(item.itemPrice)}</span>
                         <span className="text-sm text-muted-foreground">each</span>
                       </div>
                       <div className="text-right gap-2 flex justify-end">
-                        <span className="text-sm">{formatCurrency(formatScientificToNumber(item.itemTotal) ?? 0)}</span>
+                        <span className="text-sm">{formatCurrency(item.itemTotal)}</span>
                         <span className="text-sm text-muted-foreground">total</span>
                       </div>
                     </div>
@@ -124,14 +124,14 @@ const InvoiceDetails = (invoiceDetailsProps: InvoiceDTO) => {
                 {invoiceDetailsProps.invoiceTax && (
                   <div className="flex justify-between items-center py-2 px-4 rounded-md">
                     <span className="text-sm">Tax</span>
-                    <span className="text-sm">{formatCurrency(formatScientificToNumber(invoiceDetailsProps.invoiceTax) ?? 0)}</span>
+                    <span className="text-sm">{formatCurrency(invoiceDetailsProps.invoiceTax)}</span>
                   </div>
                 )}
 
                 {invoiceDetailsProps.invoiceAmount && (
                   <div className="flex justify-between items-center py-2 px-4 rounded-md">
                     <span className="text-sm">Total</span>
-                    <span className="text-sm">{formatCurrency(formatScientificToNumber(invoiceDetailsProps.invoiceAmount) ?? 0)}</span>
+                    <span className="text-sm">{formatCurrency(invoiceDetailsProps.invoiceAmount)}</span>
                   </div>
                 )}
               </>
