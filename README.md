@@ -31,10 +31,12 @@ Este projeto é o frontend do sistema **OCR Invoice**, construído em Next.js (A
 ## URLS DE PRODUCAO:
 
 URLs de Produção e Repositórios
- Frontend: https://invoice-check-frontend.vercel.app/
- Repositório: https://github.com/pedrohbl03/invoice-check-frontend
- Backend: https://invoice-check-backend.vercel.app/
- Repositório: https://github.com/pedrohbl03/invoice-check-backend
+ - **Frontend:** https://invoice-check-frontend.vercel.app/
+ - **Repositório:** https://github.com/pedrohbl03/invoice-check-frontend
+
+
+ - **Backend:** https://invoice-check-backend.vercel.app/
+ - **Repositório:** https://github.com/pedrohbl03/invoice-check-backend
 
  ## Infraestrutura
  O projeto foi completamente hospedado na infraestrutura da Vercel, utilizando o Neon para
