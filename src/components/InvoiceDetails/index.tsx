@@ -8,6 +8,7 @@ import { Button } from "../ui/button"
 import { INVOICE_STATUS } from "@/constants/invoice.constants"
 import { Spinner } from "../ui/spinner"
 import { InvoiceDTO } from "@/types/services/IInvoice.service"
+import { DownloadSummary } from "./DownloadSummary"
 
 const InvoiceDetailsLabel = ({ label, value, icon }: { label: string, value: string, icon: React.ReactNode }) => {
   return (
@@ -171,9 +172,7 @@ const InvoiceDetails = (invoiceDetailsProps: InvoiceDTO) => {
         </div>
       </div>
 
-      <Button>
-        Download interactive PDF
-      </Button>
+      <DownloadSummary invoiceId={invoiceDetailsProps.id} />
     </div>
   )
 }

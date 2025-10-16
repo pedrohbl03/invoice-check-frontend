@@ -6,7 +6,16 @@ const nextConfig: NextConfig = {
     globalNotFound: true,
   },
   images: {
-    domains: ['pub-ea2a538675a9407d90b18029b42bb9f2.r2.dev', 'images.unsplash.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'pub-ea2a538675a9407d90b18029b42bb9f2.r2.dev',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
   },
 };
 

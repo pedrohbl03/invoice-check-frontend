@@ -48,3 +48,8 @@ export const sendInvoiceChatMessage = async (id: string, message: string) => {
   const { data } = await api.post<IChatInteractionsDTO>(`/invoices/${id}/chat`, { message });
   return data;
 };
+
+export const generateInvoiceSummaryPdf = async (id: string) => {
+  const { data } = await api.get<{ url: string }>(`/invoices/${id}/pdf`);
+  return data.url;
+};

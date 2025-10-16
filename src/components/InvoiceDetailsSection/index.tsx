@@ -25,8 +25,6 @@ export const InvoiceDetailsSection = ({ invoiceDetails, chatHistory }: IInvoiceD
     }
   }, 5000, [invoiceDetailsLocalState]);
 
-
-
   const handleNewMessage = async (message: IChatInteractionsDTO) => {
     setChatHistoryLocalState((prev) => [...prev, message]);
 
