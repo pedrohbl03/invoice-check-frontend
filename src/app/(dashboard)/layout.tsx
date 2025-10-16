@@ -9,7 +9,7 @@ export default function DashboardLayout({
 }>) {
 
   return (
-    <div>
+    <div className="px-2">
       <Header />
       <Container className="py-2 px-4">
         <CustomBreadcrumb />

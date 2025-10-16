@@ -41,13 +41,13 @@ const FileUploader = ({
       aria-disabled={isUploading}
     >
 
-      <input type="file" onChange={(e) => handleLoadFile(e)} className="hidden" ref={inputUploadRef} accept=".pdf,.png,.jpg,.jpeg,.webp" disabled={isUploading} />
+      <input type="file" onChange={(e) => handleLoadFile(e)} className="hidden" ref={inputUploadRef} accept=".png,.jpg,.jpeg" disabled={isUploading} />
 
       {!isUploading && !file && (
         <div className="flex flex-col gap-2 items-center justify-center">
           <UploadIcon className="w-10 h-10 text-gray-500" />
           <p className="text-sm text-gray-500">Drag and drop your file here or click to upload</p>
-          <p className="text-sm text-gray-500">Supported formats: PDF, PNG, JPG, JPEG and WEBP</p>
+          <p className="text-sm text-gray-500">Supported formats: PNG, JPG and JPEG</p>
         </div>
       )}
 
