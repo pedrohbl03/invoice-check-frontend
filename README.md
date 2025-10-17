@@ -117,9 +117,5 @@ Chat é desbloqueado somente quando `invoiceStatus === 'ANALYZED'`.
 - Internacionalização (i18n).
 - Testes unitários e de integração.
 
-
-## Licença
-MIT
-
 ---
 Made with ❤️ using Next.js.
